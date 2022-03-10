@@ -1,7 +1,4 @@
-22/03/08: INFO: ChromeDriver was opened successfully
-22/03/08: INFO: CLICK TO features
-22/03/08: INFO: GET documents LINK https://file-examples.com/index.php/sample-documents-download/sample-pdf-download/
-22/03/08: INFO: SUCCESSFULLY DOWNLOAD  1646770752.198175_049e1d36-9f1d-11ec-a699-1803731ff4b9_150 kB.pdf
-22/03/08: INFO: SUCCESSFULLY DOWNLOAD  1646770752.569277_04d6bd68-9f1d-11ec-b96c-1803731ff4b9_500 kB.pdf
-22/03/08: INFO: SUCCESSFULLY DOWNLOAD  1646770754.327305_05e2fe62-9f1d-11ec-94de-1803731ff4b9_1 MB.pdf
-22/03/08: INFO: CODE FINISH SUCCESSFULLY
+22/03/10: INFO: ChromeDriver was opened successfully
+22/03/10: INFO: CLICK TO features
+22/03/10: INFO: GET documents LINK https://file-examples.com/index.php/sample-documents-download/sample-pdf-download/
+22/03/10: INFO: SUCCESSFULLY DOWNLOAD  1646932683.147749_0afc22fa-a096-11ec-9cab-1803731ff4b9_150 kB.pdf

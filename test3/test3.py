@@ -1,3 +1,4 @@
+#!/usr/bin/python
 from cfg import *
 import re
 from selenium.webdriver.support.ui import WebDriverWait
@@ -5,23 +6,23 @@ from selenium.webdriver.chrome.options import Options
 
 ################################################################################################
 # logging
-fileName = "Report wmphvacations"
-logging.basicConfig(filename=f'{fileName}.log', format='%(asctime)s: %(levelname)s: %(message)s',
-                    datefmt='%y/%m/%d', level=logging.INFO, filemode='w')
+report_file_name = "Report wmphvacations"
+logging.basicConfig(
+    filename=f'{report_file_name}.log', format='%(asctime)s: %(levelname)s: %(message)s',
+    datefmt='%y/%m/%d', level=logging.INFO, filemode='w')
 ################################################################################################
 # Browser
 options = Options()
-# browser = webdriver.Chrome(chromeDriverPath, chrome_options=options)
 wait = WebDriverWait(browser, 10)
-websiteLink = 'https://www.wmphvacations.com/'
-# browser.maximize_window()
+website_link = 'https://www.wmphvacations.com/'
 
-browser.get(websiteLink)
+browser.get(website_link)
 sleep(randint(10, 15))
-currentURL = browser.current_url
-logging.info(f"Browser open {websiteLink} "
-             f"and redirect to {currentURL}")
-allLinks = browser.find_elements(by=By.CSS_SELECTOR, value='#menu-menu-header a')
+# currentURL = browser.current_url
+logging.info(f"Browser open {website_link} "
+             f"and redirect to {browser.current_url}")
+allLinks = find_more_elements_by_css(
+    browser, '#menu-menu-header a')
 listURL = [link.get_attribute('href') for link in allLinks]
 for URL in listURL:
     browser.get(URL)
@@ -30,11 +31,12 @@ for URL in listURL:
 
     browser.execute_script("window.scrollTo(0, 200)")
 
-    fileName = re.search('arrivia.com.(.*)', URL).group(1).replace('/', '')
-    fileName = f'screenShots/{fileName}.png'
-    browser.get_screenshot_as_file(fileName)
+    file_name = re.search('arrivia.com.(.*)', URL).group(1).replace('/', '')
+    file_name = f'screenShots/{file_name}.png'
 
-    logging.info(f"SUCCESSFULLY take a screenshot  {fileName}")
+    browser.get_screenshot_as_file(file_name)
+
+    logging.info(f"SUCCESSFULLY take a screenshot  {file_name}")
 
     sleep(randint(1, 2))
 

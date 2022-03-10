@@ -5,49 +5,54 @@ import uuid
 
 ################################################################################################
 # IN
-websiteLink = 'https://file-examples.com/'
+website_link = 'https://file-examples.com/'
 ################################################################################################
 ################################################################################################
 ################################################################################################
 # logging
-fileName = "Report file-examples"
-logging.basicConfig(filename=f'{fileName}.log', format='%(asctime)s: %(levelname)s: %(message)s',
-                    datefmt='%y/%m/%d', level=logging.INFO, filemode='w')
+report_file_name = "Report file-examples"
+logging.basicConfig(
+    filename=f'{report_file_name}.log', format='%(asctime)s: %(levelname)s: %(message)s',
+    datefmt='%y/%m/%d', level=logging.INFO, filemode='w')
 ################################################################################################
-browser_get(websiteLink, 'body', 5)
+browser_get(
+    website_link,
+    'body', 5)
 sleep(randint(1, 2))
 
-features = browser.find_element(by=By.CSS_SELECTOR, value="#menu-item-27 > a")
-features.click()
+features = find_element_by_css_and_click(
+    browser, "#menu-item-27 > a")
 logging.info("CLICK TO features")
 sleep(randint(1, 2))
-documentsURL = browser.find_element(by=By.CSS_SELECTOR,
-                                    value="#table-files > tbody > tr:nth-child(4) > td.text-right.file-link > a").get_attribute(
+
+documents_url = find_element_by_css_and_get_attribute(
+    browser, "#table-files > tbody > tr:nth-child(4) > td.text-right.file-link > a",
     'href')
-browser.get(documentsURL)
-logging.info(f"GET documents LINK {documentsURL}")
+browser.get(documents_url)
+logging.info(f"GET documents LINK {documents_url}")
 ################################################################################################
 
-downloadRows = browser.find_elements(by=By.CSS_SELECTOR, value='#table-files > tbody > tr')
-for row in downloadRows:
-    file_size = row.find_element(by=By.CSS_SELECTOR, value='td.file-ext').text
-    link = row.find_element(by=By.CSS_SELECTOR, value='td.text-right.file-link > a.btn.btn-orange').get_attribute(
+download_rows = find_more_elements_by_css(
+    browser, '#table-files > tbody > tr')
+for row in download_rows:
+    file_size = find_element_by_css_and_take_text(
+        row, 'td.file-ext')
+    link = find_element_by_css_and_get_attribute(
+        row, 'td.text-right.file-link > a.btn.btn-orange',
         'href')
     # print(file_size)
     # print(link)
 
     uuid_number = uuid.uuid1()
 
-    dateAndTime = datetime.now()
-    dateAndTimeTimestamp = datetime.timestamp(dateAndTime)
-    fileName = f'{dateAndTimeTimestamp}_{uuid_number}_{file_size}.pdf'
+    date_amd_time = datetime.now().timestamp()
+    file_name = f'{date_amd_time}_{uuid_number}_{file_size}.pdf'
 
     response = requests.get(link)
 
-    # breakpoint()
-    with open(f'files/{fileName}', 'wb') as f:
+    with open(f'files/{file_name}', 'wb') as f:
         f.write(response.content)
-    logging.info(f"SUCCESSFULLY DOWNLOAD  {fileName}")
+    logging.info(f"SUCCESSFULLY DOWNLOAD  {file_name}")
 
 browser.quit()
 
