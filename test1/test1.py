@@ -9,7 +9,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 website_link = 'https://www.booking.com/'
 currency = "USD"
 Place = "Barcelona"
-date_check_in = datetime(2022, 3, 10)  # Year,Month,Day
+date_check_in = datetime(2022, 3, 15)  # Year,Month,Day
 # date_check_out  = "2022-04-10"
 days_value = 40
 date_check_out = date_range(
@@ -36,7 +36,7 @@ logging.basicConfig(
     filename=f'{report_file_name}.log', format='%(asctime)s: %(levelname)s: %(message)s',
     datefmt='%y/%m/%d', level=logging.INFO, filemode='w')
 ################################################################################################
-
+# start Browser
 browser_get(
     website_link,
     'body', 5)
@@ -51,13 +51,14 @@ currency_current = find_element_by_css(
 if currency not in currency_current.text:
     currency_current.click()
     sleep(randint(1, 2))
-    currency_part = browser.find_element(by=By.CLASS_NAME, value='bui-modal__header')
+    currency_part = find_element_by_css(
+        browser, 'bui-modal__header')
     currency_all = find_more_elements_by_css(
         currency_part, 'ul')
 
     for one_currency in currency_all:
-        innerHTML = one_currency.get_attribute('innerHTML')
-        if currency in innerHTML:
+        inner_html = one_currency.get_attribute('inner_html')
+        if currency in inner_html:
             currencyPosition = find_element_by_css_and_click(
                 one_currency, 'a')
             sleep(randint(1, 2))
@@ -73,7 +74,9 @@ logging.info(f"SEND Key - {Place}")
 wait = WebDriverWait(browser, 20)
 
 path_to_confirm = f'//span[text()="{Place}"]'
-select_from_drop_menu = wait.until(EC.element_to_be_clickable((By.XPATH, path_to_confirm)))
+select_from_drop_menu = wait.until(
+    EC.element_to_be_clickable((
+        By.XPATH, path_to_confirm)))
 select_from_drop_menu.click()
 sleep(randint(1, 3))
 logging.info(f'SELECTED - {Place}')
@@ -84,7 +87,7 @@ todays_date = date.today()
 today_month = todays_date.month
 avaliable_months = [
     today_month,
-    today_month + 1
+    today_month + 1,
 ]
 
 month_in = date_check_in.month
@@ -112,7 +115,7 @@ adults = find_element_by_path_and_click(
 adults_current = find_element_by_path(
     adults, '//span[@data-bui-ref="input-stepper-value"]')
 adults_current_no = int(adults_current.text)
-# print(adults_current_no, type(adults_current_no))
+
 adults_part = find_element_by_path(
     browser, '//div[@class="sb-group__field sb-group__field-adults"]')
 if adults_current_no > adults_travel:
@@ -139,17 +142,16 @@ if adults_travel != 0:
 
     age_part = find_element_by_path_and_click(
         browser, '//*[@id="xp__guests__inputs-container"]')
-    # age_part.click()
+
     age_sets = find_more_elements_by_path(
         age_part, '//div/div/div[3]/select')
-    # age_sets = age_part.find_elements(by=By.XPATH, value='//div/div/div[3]/select')
+
     kid_no = 0
     for one_set in age_sets:
         one_set.click()
         sleep(randint(1, 2))
 
         age = ages_kids[kid_no]
-        # age_list = one_set.find_elements(by=By.CSS_SELECTOR, value="option")
         age_list = find_more_elements_by_css(
             one_set, 'option')
 
@@ -157,7 +159,6 @@ if adults_travel != 0:
             option.click()
             logging.info(f"SELECT - AGE {age}")
             sleep(randint(2, 3))
-
         kid_no += 1
 
     logging.info("AGES ADDED")
@@ -169,88 +170,88 @@ sleep(randint(5, 8))
 logging.info("SEARCH - DONE")
 
 if 'Map' in browser.current_url:
-    close_map('//*[@id="b2searchresultsPage"]/div[9]/div[2]')
+    close_map(
+        '//*[@id="b2searchresultsPage"]/div[9]/div[2]')
 ################################################################################################
 # Sort
 try:
-    sortPart = find_element_by_path(
+    sort_part = find_element_by_path_and_click(
         browser, '//*[@id="right"]/div[1]/div/div/div/span/button')
-    sortPart.click()
-    print("CLICK")
-    sortAll = find_element_by_path_and_click(
+    sort_all = find_element_by_path_and_click(
         browser, '//button[@data-id="class_and_price"]')
 except:
     try:
-        sortPart = find_more_elements_by_path(
+        sort_parts = find_more_elements_by_path(
             browser, '//div[1]/div/div/div[2]/ul/li')
-        print(len(sortPart))
-        for oneSort in sortPart:
-            innerHtml = oneSort.get_attribute('innerHTML')
-            if str(sort_in) in str(innerHtml):
+        for one_sort in sort_parts:
+            inner_html = one_sort.get_attribute('inner_html')
+            if str(sort_in) in str(inner_html):
                 link = find_element_by_css(
-                    oneSort, 'a')
+                    one_sort, 'a')
                 browser.get(link.get_attribute('href'))
-                sleep(randint(1, 2))
                 break
     except:
-        sortPart = find_element_by_path(
+        sort_part = find_element_by_path(
             browser, '//button[@data-testid="sorters-dropdown-trigger"]')
-        sortAll = find_element_by_path_and_click(
+        sort_all = find_element_by_path_and_click(
             browser, '//a[@data-id="class_and_price"')
-        setPriceFilter = find_element_by_path_and_click(
+        set_price_filter = find_element_by_path_and_click(
             browser, f'//div[@data-testid="filters-group-label-content"][text()="{sort_in}"]')
+sleep(randint(2, 3))
+
 if "Map" in browser.current_url:
-    close_map('//*[@id="b2searchresultsPage"]/div[9]/div[2]')
+    close_map(
+        '//*[@id="b2searchresultsPage"]/div[9]/div[2]')
 ################################################################################################
 # Filters
-allFilters = find_more_elements_by_path(
+all_filters = find_more_elements_by_path(
     browser, '//div[@data-testid="filters-group-label-content"]')
-for oneFilter in filter_list:
-    for onePosibleFilter in allFilters:
+for one_filter in filter_list:
+    for one_posible_filter in all_filters:
         try:
-            filterInner = onePosibleFilter.text
+            filter_text = one_posible_filter.text
         except:
             continue
 
-        if oneFilter in str(filterInner):
-            setFilter = find_element_by_path(
-                browser, f'//div[@data-testid="filters-group-label-content"][text()="{oneFilter}"]')
-            setFilter.click()
-            logging.info(f'CLICK FILTER {oneFilter}')
+        if one_filter in str(filter_text):
+            set_filter = find_element_by_path(
+                browser, f'//div[@data-testid="filters-group-label-content"][text()="{one_filter}"]')
+            set_filter.click()
+            logging.info(f'CLICK FILTER {one_filter}')
             sleep(randint(2, 4))
             break
 
 logging.info('SELECTED - Filters')
 ################################################################################################
 # Range Price
-currentURL = browser.current_url
-URL = currentURL.replace('&sb=1', '').replace('&src_elem=sb', '').replace('#map_opened', '')
-editedURL = f'{currentURL}&nflt=price%3DUSD-{price_min}-{price_max}-1'
+current_url = browser.current_url
+current_url = current_url.replace('&sb=1', '').replace('&src_elem=sb', '').replace('#map_opened', '')
+edited_url = f'{current_url}&nflt=price%3DUSD-{price_min}-{price_max}-1'
 browser_get(
-    editedURL, 'body', 3)
+    edited_url, 'body', 3)
 
-if 'map_opened' in str(editedURL):
+if 'map_opened' in str(edited_url):
     close_map('//*[@id="b2searchresultsPage"]/div[9]/div[2]')
 logging.info("PRICE RANGED")
 ################################################################################################
 # Products
-allProducts = find_more_elements_by_path(
+all_products = find_more_elements_by_path(
     browser, '//div[@data-testid="property-card"]')
-for oneProduct in allProducts[0:10]:
+for one_product in all_products[0:10]:
     name = find_element_by_path_and_take_text(
-        oneProduct, '//div[@data-testid="title"]')
+        one_product, '//div[@data-testid="title"]')
     price = find_element_by_path_and_take_text(
-        oneProduct, '//div[@data-testid="price-and-discounted-price"]')
+        one_product, '//div[@data-testid="price-and-discounted-price"]')
     score_and_reviews = find_element_by_path(
-        oneProduct, '//div[@data-testid="review-score"]')
+        one_product, '//div[@data-testid="review-score"]')
     number_of_reviews = find_element_by_css_and_take_text(
         score_and_reviews, 'div:nth-child(1)')
     score = find_element_by_css_and_take_text(
         score_and_reviews, 'div:nth-child(2)')
     location = find_element_by_path_and_take_text(
-        oneProduct, '//div[@data-testid="location"]')
+        one_product, '//div[@data-testid="location"]')
     image_url = find_element_by_path_and_get_attribute(
-        oneProduct, '//img[@data-testid="image"]',
+        one_product, '//img[@data-testid="image"]',
         'src')
 
     print(f"Name: {name}")

@@ -28,6 +28,7 @@ def browser_get(
     return False
 
 
+# Xpath
 def find_element_by_path(
         search_element,
         search_path):
@@ -60,6 +61,7 @@ def find_element_by_path_and_get_attribute(
     return search_element.find_element(by=By.XPATH, value=search_path).get_attribute(attribute)
 
 
+# Css
 def find_element_by_css(
         search_element,
         search_path):
@@ -92,6 +94,7 @@ def find_element_by_css_and_get_attribute(
     return search_element.find_element(by=By.CSS_SELECTOR, value=search_path).get_attribute(attribute)
 
 
+# Date
 def set_month(
         search_element, month,
         today_month, next_xpath):
@@ -115,15 +118,16 @@ def set_date(
     return logging.info(f"CLICK  {date_in}")
 
 
+def date_range(
+        date_check_in,
+        days_value):
+    return date_check_in + timedelta(days=days_value)
+
+
+# Map
 def close_map(
         map_xpath):
     if not find_element_by_path(
             browser, map_xpath):
         return True
     return find_element_by_path_and_click(browser, map_xpath)
-
-
-def date_range(
-        date_check_in,
-        days_value):
-    return date_check_in + timedelta(days=days_value)
