@@ -1,43 +1,45 @@
 #!/usr/bin/python
-from cfg import *
-import requests
+"""Download pdf files from https://file-examples.com"""
 import uuid
+import requests
+from cfg import logging, datetime, sleep, randint, \
+    browser, browser_get, find_more_elements_by_css, \
+    find_elem_by_css_and_click, find_elem_by_css_and_take_text, \
+    find_elem_by_css_and_get_attribute
 
-################################################################################################
 # IN
-website_link = 'https://file-examples.com/'
-################################################################################################
-################################################################################################
-################################################################################################
+WEBSITE_LINK = 'https://file-examples.com/'
+
 # logging
-report_file_name = "Report file-examples"
+REPORT_FILE_NAME = "Report file-examples"
 logging.basicConfig(
-    filename=f'{report_file_name}.log', format='%(asctime)s: %(levelname)s: %(message)s',
+    filename=f'{REPORT_FILE_NAME}.log',
+    format='%(asctime)s: %(levelname)s: %(message)s',
     datefmt='%y/%m/%d', level=logging.INFO, filemode='w')
-################################################################################################
+
 browser_get(
-    website_link,
+    WEBSITE_LINK,
     'body', 5)
 sleep(randint(1, 2))
 
-features = find_element_by_css_and_click(
+features = find_elem_by_css_and_click(
     browser, "#menu-item-27 > a")
 logging.info("CLICK TO features")
 sleep(randint(1, 2))
 
-documents_url = find_element_by_css_and_get_attribute(
-    browser, "#table-files > tbody > tr:nth-child(4) > td.text-right.file-link > a",
+documents_url = find_elem_by_css_and_get_attribute(
+    browser,
+    "#table-files > tbody > tr:nth-child(4) > td.text-right.file-link > a",
     'href')
 browser.get(documents_url)
 logging.info(f"GET documents LINK {documents_url}")
-################################################################################################
 
 download_rows = find_more_elements_by_css(
     browser, '#table-files > tbody > tr')
 for row in download_rows:
-    file_size = find_element_by_css_and_take_text(
+    file_size = find_elem_by_css_and_take_text(
         row, 'td.file-ext')
-    link = find_element_by_css_and_get_attribute(
+    link = find_elem_by_css_and_get_attribute(
         row, 'td.text-right.file-link > a.btn.btn-orange',
         'href')
     # print(file_size)

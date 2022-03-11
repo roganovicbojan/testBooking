@@ -1,25 +1,28 @@
 #!/usr/bin/python
-from cfg import *
+"""Avoid getting blocked by https://www.wmphvacations.com
+and take a screenshot of two
+different pages of the website"""
 import re
+from cfg import logging, sleep, randint, browser, find_more_elements_by_css
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.chrome.options import Options
 
-################################################################################################
 # logging
-report_file_name = "Report wmphvacations"
+REPORT_FILE_NAME = "Report wmphvacations"
 logging.basicConfig(
-    filename=f'{report_file_name}.log', format='%(asctime)s: %(levelname)s: %(message)s',
+    filename=f'{REPORT_FILE_NAME}.log',
+    format='%(asctime)s: %(levelname)s: %(message)s',
     datefmt='%y/%m/%d', level=logging.INFO, filemode='w')
-################################################################################################
+
 # Browser
 options = Options()
 wait = WebDriverWait(browser, 10)
-website_link = 'https://www.wmphvacations.com/'
+WEBSITE_LINK = 'https://www.wmphvacations.com/'
 
-browser.get(website_link)
+browser.get(WEBSITE_LINK)
 sleep(randint(10, 15))
 # currentURL = browser.current_url
-logging.info(f"Browser open {website_link} "
+logging.info(f"Browser open {WEBSITE_LINK} "
              f"and redirect to {browser.current_url}")
 all_links = find_more_elements_by_css(
     browser, '#menu-menu-header a')
