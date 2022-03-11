@@ -1,7 +1,7 @@
 #!/usr/bin/python
 """Navigate through booking.com to extract information"""
 from datetime import date
-from cfg import logging, datetime, sleep, randint, date_range,\
+from testBooking.cfg import logging, datetime, sleep, randint, date_range,\
     browser, browser_get, By, find_elem_by_path, \
     find_more_elements_by_path, find_elem_by_path_and_click, \
     find_elem_by_path_and_take_text, find_elem_by_path_and_get_attribute,\

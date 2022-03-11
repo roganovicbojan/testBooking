@@ -3,7 +3,7 @@
 and take a screenshot of two
 different pages of the website"""
 import re
-from cfg import logging, sleep, randint, browser, find_more_elements_by_css
+from testBooking.cfg import logging, sleep, randint, browser, find_more_elements_by_css
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.chrome.options import Options
 

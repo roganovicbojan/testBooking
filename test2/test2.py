@@ -2,7 +2,7 @@
 """Download pdf files from https://file-examples.com"""
 import uuid
 import requests
-from cfg import logging, datetime, sleep, randint, \
+from testBooking.cfg import logging, datetime, sleep, randint, \
     browser, browser_get, find_more_elements_by_css, \
     find_elem_by_css_and_click, find_elem_by_css_and_take_text, \
     find_elem_by_css_and_get_attribute
